@@ -14,7 +14,7 @@ Une application web d'assistant virtuel pour les démarches administratives, uti
 
 - Node.js (v14 ou supérieur)
 - MongoDB
-- Clé API OpenAI
+- Clé API Gemini
 
 ## Installation
 
@@ -80,7 +80,7 @@ admin-assistant/
   - MongoDB
   - Mongoose
   - JWT
-  - OpenAI API
+  - Gemini API
   - LangChain
 
 ## Sécurité
