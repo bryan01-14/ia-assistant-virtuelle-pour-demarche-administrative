@@ -71,7 +71,7 @@ router.post('/ask', auth, async (req, res) => {
 
     // Enregistrer dans l'historique avec tous les champs requis
     const historyEntry = new History({
-      userId: req.userData.userId,
+      userId: req.user.id,
       question: question, // Champ requis
       reponse: assistantAnswer, // Champ requis
       typeDemarche: typeDemarche, // Champ requis

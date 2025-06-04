@@ -39,7 +39,7 @@ const AuthLayout = ({ children }) => {
                             }}
                         >
                             <img
-                                src="/ai-assistant.png"
+                                src="AI-assistant-1.png"
                                 alt="AI Assistant"
                                 style={{
                                     width: '100%',

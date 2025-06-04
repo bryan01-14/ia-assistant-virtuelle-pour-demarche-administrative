@@ -6,13 +6,23 @@ const History = require('../models/History');
 // Récupérer l'historique d'un utilisateur
 router.get('/', auth, async (req, res) => {
     try {
-        const userId = req.userData.userId;
+        // console.log('User ID from request:', req.user); // Debug log
+        const userId = req.user.id;
+        // console.log('Searching for history with userId:', userId); // Debug log
+        
         const history = await History.find({ userId })
             .sort({ date: -1 })
             .limit(50);
+            
+        // console.log('Found history items:', history.length); // Debug log
         res.json(history);
     } catch (error) {
-        res.status(500).json({ message: 'Erreur lors de la récupération de l\'historique', error: error.message });
+        console.error('Error in history route:', error); // Debug log
+        res.status(500).json({ 
+            message: 'Erreur lors de la récupération de l\'historique', 
+            error: error.message,
+            details: error
+        });
     }
 });
 
@@ -21,7 +31,7 @@ router.get('/:id', auth, async (req, res) => {
     try {
         const conversation = await History.findOne({
             _id: req.params.id,
-            userId: req.userData.userId
+            userId: req.user.id
         });
         
         if (!conversation) {
@@ -39,7 +49,7 @@ router.delete('/:id', auth, async (req, res) => {
     try {
         const conversation = await History.findOneAndDelete({
             _id: req.params.id,
-            userId: req.userData.userId
+            userId: req.user.id
         });
         
         if (!conversation) {
