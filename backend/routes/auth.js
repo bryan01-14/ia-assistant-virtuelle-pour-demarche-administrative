@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const auth = require('../middleware/auth');
 
-// Route pour obtenir le profil de l'utilisateur
+
 router.get('/profile', auth, async (req, res) => {
     try {
         console.log('Requête profile reçue, userId:', req.user.id); // Debug log
@@ -22,7 +22,7 @@ router.get('/profile', auth, async (req, res) => {
     }
 });
 
-// Route pour mettre à jour le profil
+
 router.put('/profile', auth, async (req, res) => {
     try {
         const { nom, prenom, email, password } = req.body;
@@ -32,7 +32,7 @@ router.put('/profile', auth, async (req, res) => {
             return res.status(404).json({ message: 'Utilisateur non trouvé' });
         }
 
-        // Vérifier si l'email est déjà utilisé par un autre utilisateur
+ 
         if (email !== user.email) {
             const existingUser = await User.findOne({ email });
             if (existingUser) {
@@ -40,7 +40,7 @@ router.put('/profile', auth, async (req, res) => {
             }
         }
 
-        // Mettre à jour les informations de base
+     
         user.nom = nom || user.nom;
         user.prenom = prenom || user.prenom;
         user.email = email || user.email;

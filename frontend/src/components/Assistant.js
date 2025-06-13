@@ -26,7 +26,8 @@ import {
     ContentCopy as CopyIcon,
     Download as DownloadIcon,
     ArrowRight as ArrowRightIcon,
-    CheckCircle as CheckCircleIcon
+    CheckCircle as CheckCircleIcon,
+    SmartToy as RobotIcon
 } from '@mui/icons-material';
 import axios from 'axios';
 import MainLayout from './MainLayout';
@@ -171,15 +172,27 @@ const Assistant = () => {
     };
 
     const handleDownloadChat = () => {
-        const chatText = chatHistory.map(msg => 
-            `${msg.sender === 'user' ? 'Vous' : 'Assistant'}: ${msg.text}`
-        ).join('\n\n');
+        const formatDate = (date) => {
+            return new Date(date).toLocaleString('fr-FR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        };
+
+        const chatText = chatHistory.map(msg => {
+            const sender = msg.sender === 'user' ? 'Vous' : 'Assistant';
+            const timestamp = formatDate(new Date());
+            return `[${timestamp}] ${sender}:\n${msg.text}\n`;
+        }).join('\n---\n\n');
         
-        const blob = new Blob([chatText], { type: 'text/plain' });
+        const blob = new Blob([chatText], { type: 'text/plain;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `conversation-${new Date().toISOString()}.txt`;
+        a.download = `conversation-${formatDate(new Date()).replace(/[/:]/g, '-')}.txt`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -187,7 +200,7 @@ const Assistant = () => {
 
         setSnackbar({
             open: true,
-            message: 'Conversation téléchargée',
+            message: 'Conversation téléchargée avec succès',
             severity: 'success'
         });
     };
@@ -296,48 +309,54 @@ const Assistant = () => {
 
     return (
         <MainLayout>
-            <Box
-                sx={{
-                    height: 'calc(100vh - 100px)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    maxWidth: '1200px',
-                    margin: '0 auto',
-                    gap: 2
-                }}
-            >
+            <Box sx={{ maxWidth: '1200px', margin: '0 auto', p: 2 }}>
                 <Paper
                     elevation={3}
                     sx={{
-                        flex: 1,
-                        overflow: 'hidden',
-                        display: 'flex',
-                        flexDirection: 'column',
                         borderRadius: 4,
+                        overflow: 'hidden',
                         background: 'rgba(255, 255, 255, 0.9)',
                         backdropFilter: 'blur(10px)',
+                        height: 'calc(100vh - 100px)',
+                        display: 'flex',
+                        flexDirection: 'column'
                     }}
                 >
                     <Box
                         sx={{
-                            p: 2,
-                            borderBottom: '1px solid',
-                            borderColor: 'divider',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
+                            p: 3,
                             background: 'linear-gradient(45deg, #2196f3 30%, #21CBF3 90%)',
                             color: 'white',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between'
                         }}
                     >
-                        <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                            Assistant Virtuel
-                        </Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                            <Avatar
+                                sx={{
+                                    width: 48,
+                                    height: 48,
+                                    bgcolor: 'white',
+                                    color: 'primary.main'
+                                }}
+                            >
+                                <RobotIcon sx={{ fontSize: 32 }} />
+                            </Avatar>
+                            <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                                Assistant Virtuel
+                            </Typography>
+                        </Box>
                         <Box sx={{ display: 'flex', gap: 1 }}>
                             <Tooltip title="Télécharger la conversation">
                                 <IconButton
                                     onClick={handleDownloadChat}
-                                    sx={{ color: 'white' }}
+                                    sx={{ 
+                                        color: 'white',
+                                        '&:hover': {
+                                            backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                                        }
+                                    }}
                                     disabled={chatHistory.length === 0}
                                 >
                                     <DownloadIcon />
@@ -346,7 +365,12 @@ const Assistant = () => {
                             <Tooltip title="Effacer la conversation">
                                 <IconButton
                                     onClick={handleClearChat}
-                                    sx={{ color: 'white' }}
+                                    sx={{ 
+                                        color: 'white',
+                                        '&:hover': {
+                                            backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                                        }
+                                    }}
                                     disabled={chatHistory.length === 0}
                                 >
                                     <DeleteIcon />
@@ -362,8 +386,7 @@ const Assistant = () => {
                             p: 2,
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: 2,
-                            background: 'linear-gradient(180deg, #f5f5f5 0%, #ffffff 100%)',
+                            gap: 2
                         }}
                     >
                         {chatHistory.map((msg, index) => (
@@ -372,139 +395,92 @@ const Assistant = () => {
                                     sx={{
                                         display: 'flex',
                                         justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start',
-                                        gap: 1,
+                                        gap: 2,
+                                        alignItems: 'flex-start'
                                     }}
                                 >
                                     {msg.sender === 'assistant' && (
                                         <Avatar
-                                            src="/ai-assistant.png"
-                                            alt="AI Assistant"
                                             sx={{
-                                                width: 32,
-                                                height: 32,
+                                                width: 40,
+                                                height: 40,
                                                 bgcolor: 'primary.main',
+                                                color: 'white'
                                             }}
-                                        />
+                                        >
+                                            <RobotIcon />
+                                        </Avatar>
                                     )}
                                     <Paper
                                         elevation={1}
                                         sx={{
                                             p: 2,
                                             maxWidth: '70%',
-                                            borderRadius: 2,
-                                            background: msg.sender === 'user'
-                                                ? 'linear-gradient(45deg, #2196f3 30%, #21CBF3 90%)'
-                                                : 'white',
+                                            backgroundColor: msg.sender === 'user' 
+                                                ? 'primary.main' 
+                                                : msg.error 
+                                                    ? 'error.light'
+                                                    : 'grey.100',
                                             color: msg.sender === 'user' ? 'white' : 'text.primary',
-                                            position: 'relative',
-                                            '&:hover .message-actions': {
-                                                opacity: 1,
-                                            },
-                                            '&::before': {
-                                                content: '""',
-                                                position: 'absolute',
-                                                top: '50%',
-                                                [msg.sender === 'user' ? 'right' : 'left']: -8,
-                                                transform: 'translateY(-50%)',
-                                                borderStyle: 'solid',
-                                                borderWidth: '8px 8px 8px 0',
-                                                borderColor: msg.sender === 'user'
-                                                    ? 'transparent #2196f3 transparent transparent'
-                                                    : 'transparent white transparent transparent',
-                                            },
+                                            borderRadius: 2,
+                                            position: 'relative'
                                         }}
                                     >
                                         {msg.sender === 'assistant' ? (
                                             formatAssistantResponse(msg.text)
                                         ) : (
-                                            <Typography variant="body1">{msg.text}</Typography>
+                                            <Typography>{msg.text}</Typography>
                                         )}
-                                        <Box
-                                            className="message-actions"
+                                        <IconButton
+                                            size="small"
+                                            onClick={() => handleCopyMessage(msg.text)}
                                             sx={{
                                                 position: 'absolute',
-                                                top: 8,
-                                                right: 8,
-                                                opacity: 0,
-                                                transition: 'opacity 0.2s',
-                                                display: 'flex',
-                                                gap: 0.5,
+                                                top: 4,
+                                                right: 4,
+                                                color: msg.sender === 'user' ? 'white' : 'text.secondary'
                                             }}
                                         >
-                                            <Tooltip title="Copier le message">
-                                                <IconButton
-                                                    size="small"
-                                                    onClick={() => handleCopyMessage(msg.text)}
-                                                    sx={{
-                                                        color: msg.sender === 'user' ? 'white' : 'primary.main',
-                                                        '&:hover': {
-                                                            backgroundColor: msg.sender === 'user'
-                                                                ? 'rgba(255, 255, 255, 0.1)'
-                                                                : 'rgba(33, 150, 243, 0.1)',
-                                                        },
-                                                    }}
-                                                >
-                                                    <CopyIcon fontSize="small" />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </Box>
+                                            <CopyIcon fontSize="small" />
+                                        </IconButton>
                                     </Paper>
                                     {msg.sender === 'user' && (
                                         <Avatar
                                             sx={{
-                                                width: 32,
-                                                height: 32,
-                                                bgcolor: 'secondary.main',
+                                                width: 40,
+                                                height: 40,
+                                                bgcolor: 'grey.500'
                                             }}
                                         >
-                                            {localStorage.getItem('user')?.[0] || 'U'}
+                                            <Typography variant="body2">U</Typography>
                                         </Avatar>
                                     )}
                                 </Box>
                             </Fade>
                         ))}
-                        {loading && (
-                            <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
-                                <CircularProgress size={24} />
-                            </Box>
-                        )}
                         <div ref={messagesEndRef} />
                     </Box>
 
-                    <Box
-                        component="form"
-                        onSubmit={handleSubmit}
-                        sx={{
-                            p: 2,
-                            borderTop: '1px solid',
-                            borderColor: 'divider',
-                            background: 'white',
-                        }}
-                    >
-                        <Box sx={{ display: 'flex', gap: 1 }}>
+                    <Box sx={{ p: 2, borderTop: 1, borderColor: 'divider' }}>
+                        <form onSubmit={handleSubmit} style={{ display: 'flex', gap: 1 }}>
                             <TextField
                                 fullWidth
                                 variant="outlined"
                                 placeholder="Posez votre question..."
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
+                                disabled={loading}
                                 sx={{
                                     '& .MuiOutlinedInput-root': {
-                                        borderRadius: 3,
-                                        background: '#f5f5f5',
-                                    },
+                                        borderRadius: 2
+                                    }
                                 }}
                             />
-                            <Tooltip title={isRecording ? "Arrêter l'enregistrement" : "Démarrer l'enregistrement vocal"}>
+                            <Tooltip title={isRecording ? "Arrêter l'enregistrement" : "Démarrer l'enregistrement"}>
                                 <IconButton
                                     onClick={toggleRecording}
-                                    color={isRecording ? 'error' : 'primary'}
-                                    sx={{
-                                        bgcolor: isRecording ? 'error.light' : 'primary.light',
-                                        '&:hover': {
-                                            bgcolor: isRecording ? 'error.main' : 'primary.main',
-                                        },
-                                    }}
+                                    color={isRecording ? "error" : "primary"}
+                                    disabled={loading}
                                 >
                                     {isRecording ? <StopIcon /> : <MicIcon />}
                                 </IconButton>
@@ -514,33 +490,31 @@ const Assistant = () => {
                                 variant="contained"
                                 disabled={!message.trim() || loading}
                                 sx={{
-                                    minWidth: '100px',
-                                    borderRadius: 3,
-                                    background: 'linear-gradient(45deg, #2196f3 30%, #21CBF3 90%)',
-                                    boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .3)',
+                                    borderRadius: 2,
+                                    minWidth: '100px'
                                 }}
-                                endIcon={<SendIcon />}
                             >
-                                Envoyer
+                                {loading ? <CircularProgress size={24} color="inherit" /> : <SendIcon />}
                             </Button>
-                        </Box>
+                        </form>
                     </Box>
                 </Paper>
-            </Box>
-            <Snackbar
-                open={snackbar.open}
-                autoHideDuration={3000}
-                onClose={handleCloseSnackbar}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-            >
-                <Alert
+
+                <Snackbar
+                    open={snackbar.open}
+                    autoHideDuration={6000}
                     onClose={handleCloseSnackbar}
-                    severity={snackbar.severity}
-                    sx={{ width: '100%' }}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 >
-                    {snackbar.message}
-                </Alert>
-            </Snackbar>
+                    <Alert
+                        onClose={handleCloseSnackbar}
+                        severity={snackbar.severity}
+                        sx={{ width: '100%' }}
+                    >
+                        {snackbar.message}
+                    </Alert>
+                </Snackbar>
+            </Box>
         </MainLayout>
     );
 };

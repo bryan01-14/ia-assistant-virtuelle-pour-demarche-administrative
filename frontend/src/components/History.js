@@ -14,7 +14,8 @@ import {
     CircularProgress,
     Alert,
     Fade,
-    Divider
+    Divider,
+    Snackbar
 } from '@mui/material';
 import {
     Search as SearchIcon,
@@ -31,6 +32,11 @@ const History = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        message: '',
+        severity: 'success'
+    });
 
     useEffect(() => {
         fetchHistory();
@@ -54,15 +60,41 @@ const History = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:5000/api/history/${id}`, {
+            console.log('Tentative de suppression de l\'élément:', id);
+            const response = await axios.delete(`http://localhost:5000/api/history/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
+            console.log('Réponse de suppression:', response.data);
             setHistory(history.filter(item => item._id !== id));
+            setSnackbar({
+                open: true,
+                message: 'Conversation supprimée avec succès',
+                severity: 'success'
+            });
         } catch (error) {
-            setError('Erreur lors de la suppression');
-            console.error('Error deleting history item:', error);
+            console.error('Erreur détaillée:', error.response || error);
+            let errorMessage = 'Erreur lors de la suppression';
+            
+            if (error.response) {
+                switch (error.response.status) {
+                    case 404:
+                        errorMessage = 'Conversation non trouvée';
+                        break;
+                    case 401:
+                        errorMessage = 'Session expirée. Veuillez vous reconnecter';
+                        break;
+                    default:
+                        errorMessage = error.response.data?.message || 'Erreur lors de la suppression';
+                }
+            }
+            
+            setSnackbar({
+                open: true,
+                message: errorMessage,
+                severity: 'error'
+            });
         }
     };
 
@@ -265,6 +297,21 @@ const History = () => {
                         </List>
                     )}
                 </Paper>
+
+                <Snackbar
+                    open={snackbar.open}
+                    autoHideDuration={6000}
+                    onClose={() => setSnackbar(prev => ({ ...prev, open: false }))}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                >
+                    <Alert
+                        onClose={() => setSnackbar(prev => ({ ...prev, open: false }))}
+                        severity={snackbar.severity}
+                        sx={{ width: '100%' }}
+                    >
+                        {snackbar.message}
+                    </Alert>
+                </Snackbar>
             </Box>
         </MainLayout>
     );

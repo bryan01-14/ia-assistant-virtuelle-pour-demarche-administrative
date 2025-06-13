@@ -9,14 +9,14 @@ const History = require('../models/History');
 
 dotenv.config();
 
-// Configuration des embeddings
+
 const embeddings = new GoogleGenerativeAIEmbeddings({
   modelName: "models/embedding-001",
   apiKey: process.env.GEMINI_API_KEY,
   apiVersion: "v1beta"
 });
 
-// Initialisation du vector store (une seule fois au démarrage)
+
 let vectorStore;
 
 async function initializeVectorStore() {
@@ -35,10 +35,10 @@ async function initializeVectorStore() {
   console.log("Base de connaissances chargée avec", administrativeData.length, "entrées.");
 }
 
-// Initialiser le vector store au démarrage
+
 initializeVectorStore().catch(console.error);
 
-// Endpoint pour poser une question
+
 router.post('/ask', auth, async (req, res) => {
   try {
     const { question } = req.body;
@@ -47,11 +47,11 @@ router.post('/ask', auth, async (req, res) => {
       return res.status(400).json({ message: 'La question est requise' });
     }
 
-    // Trouver les réponses les plus pertinentes
+
     const results = await vectorStore.similaritySearch(question, 3);
     
     let response;
-    let typeDemarche = "administratif"; // Valeur par défaut
+    let typeDemarche = "administratif"; 
     let assistantAnswer;
 
     if (results.length === 0) {

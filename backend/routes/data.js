@@ -8,14 +8,14 @@ Retirer le formulaire gratuitement dans les lieux suivants :
 - Sous-direction de la police de l'air et des frontières
 - Site SNEDAI : [www.snedai.com](http://www.snedai.com)
 - Ou directement sur le site officiel : [www.monpasseport.ci](http://www.monpasseport.ci) pour :
-  * Le pré-enrôlement
-  * La prise de rendez-vous
-  * Le paiement des frais de timbre
+- Le pré-enrôlement
+- La prise de rendez-vous
+- Le paiement des frais de timbre
 
 - Enregistrement biométrique et biographique
 - Exiger un reçu d’enrôlement
 
----
+
 
 Étape 3 : Paiement
 
@@ -24,7 +24,7 @@ Retirer le formulaire gratuitement dans les lieux suivants :
   - BACI
   - Ecobank
   - NSIA Bank
- Exiger un reçu
+  -Exiger un reçu
 
 
 
@@ -46,21 +46,19 @@ Retirer le formulaire gratuitement dans les lieux suivants :
     answer: `
 Pièces à fournir pour la Carte Nationale d'Identité (CNI)
 
----
-
 PREMIÈRE DEMANDE
 
 • Justificatif de naissance (datant de moins de 2 ans) :
 
-a. Né en Côte d'Ivoire :
+ Né en Côte d'Ivoire :
 - Copie intégrale ou extrait d'acte de naissance
 - Acte de notoriété mentionnant "en vue de l'établissement de la CNI"
 
-b. Né hors Côte d'Ivoire :
+Né hors Côte d'Ivoire :
 - Acte de naissance délivré par l'ambassade de Côte d'Ivoire
 - Acte de naissance délivré par le Ministère des Affaires Étrangères
 
-c. Personne naturalisée :
+ Personne naturalisée :
 - Acte de naissance délivré en CI si né en CI
 - Acte de naissance du pays d'origine (avec traduction certifiée si nécessaire)
 
@@ -68,15 +66,15 @@ c. Personne naturalisée :
 
 • Justificatif de nationalité (datant de moins de 2 ans) :
 
-a. Personne née ivoirienne :
+ Personne née ivoirienne :
 - Certificat de nationalité
 - Copie de la CNI d’un parent (recommandé)
 
-b. Personne naturalisée :
+ Personne naturalisée :
 - Certificat de nationalité
 - Copie du décret de naturalisation authentifiée
 
-c. Nationalité par mariage :
+ Nationalité par mariage :
 - Certificat de nationalité
 - Copie de la CNI du conjoint
 - Lettre de non-opposition authentifiée
