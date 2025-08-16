@@ -129,7 +129,7 @@ const Assistant = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post('http://localhost:5000/api/assistant/ask', {
+            const response = await axios.post('https://ia-assistant-virtuelle-pour-demarch-nu.vercel.app/api/assistant/ask', {
                 question: message
             }, {
                 headers: {
