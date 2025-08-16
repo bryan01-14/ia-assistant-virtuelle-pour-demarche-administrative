@@ -44,7 +44,7 @@ const History = () => {
 
     const fetchHistory = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/history', {
+            const response = await axios.get('https://ia-assistant-virtuelle-pour-demarch-nu.vercel.app/api/history', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -61,7 +61,7 @@ const History = () => {
     const handleDelete = async (id) => {
         try {
             console.log('Tentative de suppression de l\'élément:', id);
-            const response = await axios.delete(`http://localhost:5000/api/history/${id}`, {
+            const response = await axios.delete(`https://ia-assistant-virtuelle-pour-demarch-nu.vercel.app/api/history/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
