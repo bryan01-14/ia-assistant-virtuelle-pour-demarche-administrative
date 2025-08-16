@@ -49,7 +49,7 @@ const Profile = () => {
 
                 console.log('Token:', token); // Debug log
 
-                const response = await axios.get('http://localhost:5000/api/auth/profile', {
+                const response = await axios.get('https://ia-assistant-virtuelle-pour-demarch-nu.vercel.app/api/auth/profile', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
