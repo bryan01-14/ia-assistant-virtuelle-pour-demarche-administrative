@@ -49,7 +49,7 @@ const Register = () => {
 
         setLoading(true);
         try {
-            const response = await axios.post('http://localhost:5000/api/auth/register', {
+            const response = await axios.post('https://ia-assistant-virtuelle-pour-demarch-nu.vercel.app//api/auth/register', {
                 email: formData.email,
                 password: formData.password,
                 nom: formData.nom,
